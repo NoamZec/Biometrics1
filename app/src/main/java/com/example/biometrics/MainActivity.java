@@ -23,8 +23,8 @@ import java.util.concurrent.Executor;
 public class MainActivity extends AppCompatActivity {
 
     Button fingerPrint;
-    BiometricPrompt biometricPrompt;
-    BiometricPrompt.PromptInfo promptInfo;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,26 +34,37 @@ public class MainActivity extends AppCompatActivity {
         fingerPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Executor executor = ContextCompat.getMainExecutor(MainActivity.this);
-                biometricPrompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
-                    @Override
-                    public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                        super.onAuthenticationError(errorCode, errString);
-                    }
-
-                    @Override
-                    public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                        super.onAuthenticationSucceeded(result);
-                        Toast.makeText(getApplicationContext(), "Login succeed ", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onAuthenticationFailed() {
-                        super.onAuthenticationFailed();
-                    }
-                });
+                BiometricPrompt.PromptInfo promptInfo =
+                        new BiometricPrompt.PromptInfo.Builder()
+                                .setTitle("Biometric login for my app")
+                                .setSubtitle("Log in using your biometric credential")
+                                .setNegativeButtonText("Cancel")
+                                .build();
             }
         });
 
+    }
+
+    public BiometricPrompt AfterFingerPrint(){
+        Executor executor = ContextCompat.getMainExecutor(MainActivity.this);
+        biometricPrompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getApplicationContext(), "Login succeed ", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+
+        return biometricPrompt;
     }
 }
