@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         fingerPrint = (Button)findViewById(R.id.fingerPrint);
         imageView = findViewById(R.id.imageView);
 
-        fingerPrint.setOnClickListener(v -> {
+        fingerPrint.setOnClickListener(v -> {//start the finger print
             BiometricPrompt.PromptInfo promptInfo =
                     new BiometricPrompt.PromptInfo.Builder()
                             .setTitle("Biometric login for my app")
@@ -53,14 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void openCamera() {
+    private void openCamera() {//function that open the camera
         if(askForCameraPermission()) {
            Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
            startActivityForResult(camera, 1);
         }
     }
 
-    private boolean askForCameraPermission() {
+    private boolean askForCameraPermission() {//ask for the camera's permission
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.CAMERA}, 101);
             return ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
+        if (requestCode == 1) {//get the data of the image
             Bitmap image = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(image);
         }
@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 101) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {//if permission granted this will go to function open camera
                 openCamera();
-            } else {
+            } else {// else say there should be permission
                 Toast.makeText(this, "Camera Permission is Required to Use Camera", Toast.LENGTH_SHORT).show();
             }
         }
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getApplicationContext(), "Login succeed ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Login succeed ", Toast.LENGTH_SHORT).show();//toast if login succeed
                 openCamera();
             }
 
